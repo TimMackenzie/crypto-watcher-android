@@ -31,10 +31,10 @@ interface WalletPreferences {
     /**
      * Add a new wallet pair to the saved list of wallet pairs
      */
-    fun addWalletPair(pair: WalletPair)
+    suspend fun addWalletPair(pair: WalletPair)
 
     /**
      * Remove a wallet pair from the saved list of wallet pairs
      */
-    fun removeWalletPair(pair: WalletPair)
+    suspend fun removeWalletPair(pair: WalletPair)
 }

@@ -7,10 +7,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.simplifynow.cryptowatcher.domain.BalanceCardDataSource
+import kotlinx.coroutines.launch
 
 /**
  * Supply a lazy column with cards loaded from individual data sources
@@ -19,6 +21,8 @@ import com.simplifynow.cryptowatcher.domain.BalanceCardDataSource
  */
 @Composable
 fun ColumnContentFromData(adapterList: List<BalanceCardDataSource>, viewModel: WalletViewModel = hiltViewModel()) {
+    val coroutineScope = rememberCoroutineScope()
+
     LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         items(adapterList) { item ->
             BalanceCard(
@@ -27,9 +31,11 @@ fun ColumnContentFromData(adapterList: List<BalanceCardDataSource>, viewModel: W
                 ).value
             ) {
                 Log.d("MainActivity", "Clicked to delete")
-                viewModel.getPreferences().removeWalletPair(
-                    item.getWalletPair()
-                )
+                coroutineScope.launch {
+                    viewModel.getPreferences().removeWalletPair(
+                        item.getWalletPair()
+                    )
+                }
             }
         }
     }

@@ -7,11 +7,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
@@ -42,27 +39,23 @@ class WalletPreferencesImpl @Inject constructor(
         }
     }
 
-    override fun addWalletPair(pair: WalletPreferences.WalletPair) {
-        CoroutineScope(Dispatchers.IO).launch {
-            context.dataStore.edit { prefs ->
-                val currentList =
-                    prefs[key]?.let { Json.decodeFromString<List<WalletPreferences.WalletPair>>(it) }
-                        ?: emptyList()
-                val updatedList = currentList + pair
-                prefs[key] = Json.encodeToString(updatedList)
-            }
+    override suspend fun addWalletPair(pair: WalletPreferences.WalletPair) {
+        context.dataStore.edit { prefs ->
+            val currentList =
+                prefs[key]?.let { Json.decodeFromString<List<WalletPreferences.WalletPair>>(it) }
+                    ?: emptyList()
+            val updatedList = currentList + pair
+            prefs[key] = Json.encodeToString(updatedList)
         }
     }
 
-    override fun removeWalletPair(pair: WalletPreferences.WalletPair) {
-        CoroutineScope(Dispatchers.IO).launch {
-            context.dataStore.edit { prefs ->
-                val currentList =
-                    prefs[key]?.let { Json.decodeFromString<List<WalletPreferences.WalletPair>>(it) }
-                        ?: emptyList()
-                val updatedList = currentList - pair
-                prefs[key] = Json.encodeToString(updatedList.toList())
-            }
+    override suspend fun removeWalletPair(pair: WalletPreferences.WalletPair) {
+        context.dataStore.edit { prefs ->
+            val currentList =
+                prefs[key]?.let { Json.decodeFromString<List<WalletPreferences.WalletPair>>(it) }
+                    ?: emptyList()
+            val updatedList = currentList - pair
+            prefs[key] = Json.encodeToString(updatedList.toList())
         }
     }
 }

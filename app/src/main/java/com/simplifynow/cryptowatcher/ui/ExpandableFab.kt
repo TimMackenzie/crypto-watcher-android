@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +30,7 @@ import com.simplifynow.cryptowatcher.R
 import com.simplifynow.cryptowatcher.data.local.WalletPreferences
 import com.simplifynow.cryptowatcher.domain.WalletHelper.addTestWallets
 import com.simplifynow.cryptowatcher.domain.WalletHelper.clearWallets
+import kotlinx.coroutines.launch
 
 /**
  * Expandable FAB with options for each wallet type, deleting all wallets, and adding test wallets
@@ -38,6 +40,8 @@ fun ExpandableFab(viewModel: WalletViewModel = hiltViewModel()) {
     var expanded by remember { mutableStateOf(false) }
     var showWaxInput by remember { mutableStateOf(false) }
     var showEvmInput by remember { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
         Column(
@@ -64,12 +68,16 @@ fun ExpandableFab(viewModel: WalletViewModel = hiltViewModel()) {
                 }
                 FabButton(icon = Icons.Default.Favorite, label = stringResource(R.string.add_all_test_accounts)) {
                     println("Add all clicked")
-                    addTestWallets(viewModel.getPreferences())
+                    coroutineScope.launch {
+                        addTestWallets(viewModel.getPreferences())
+                    }
                     expanded = false
                 }
                 FabButton(icon = Icons.Default.Delete, label = stringResource(R.string.clear_all)) {
                     println("Clear all clicked")
-                    clearWallets(viewModel.getPreferences())
+                    coroutineScope.launch {
+                        clearWallets(viewModel.getPreferences())
+                    }
                     expanded = false
                 }
             }
@@ -78,9 +86,14 @@ fun ExpandableFab(viewModel: WalletViewModel = hiltViewModel()) {
                 WaxInputDialog(
                     onDismiss = { showWaxInput = false },
                     onConfirm = { address ->
-                        viewModel.getPreferences().addWalletPair(
-                            WalletPreferences.WalletPair(WalletPreferences.WalletType.WAX, address)
-                        )
+                        coroutineScope.launch {
+                            viewModel.getPreferences().addWalletPair(
+                                WalletPreferences.WalletPair(
+                                    WalletPreferences.WalletType.WAX,
+                                    address
+                                )
+                            )
+                        }
                     }
                 )
             }
@@ -89,9 +102,14 @@ fun ExpandableFab(viewModel: WalletViewModel = hiltViewModel()) {
                 EvmInputDialog(
                     onDismiss = { showEvmInput = false },
                     onConfirm = { address ->
-                        viewModel.getPreferences().addWalletPair(
-                            WalletPreferences.WalletPair(WalletPreferences.WalletType.ETH, address)
-                        )
+                        coroutineScope.launch {
+                            viewModel.getPreferences().addWalletPair(
+                                WalletPreferences.WalletPair(
+                                    WalletPreferences.WalletType.ETH,
+                                    address
+                                )
+                            )
+                        }
                     }
                 )
             }

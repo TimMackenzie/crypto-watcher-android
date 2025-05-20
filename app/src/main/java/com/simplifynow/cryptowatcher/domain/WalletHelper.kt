@@ -12,7 +12,7 @@ object WalletHelper {
     /**
      * Add pre-defined test wallets to preferences
      */
-    fun addTestWallets(walletPreferences: WalletPreferences) {
+    suspend fun addTestWallets(walletPreferences: WalletPreferences) {
         val walletPairs = listOf(
             WalletPreferences.WalletPair(WalletPreferences.WalletType.WAX, "battleminers"),
             WalletPreferences.WalletPair(WalletPreferences.WalletType.WAX, "eosio"),
@@ -20,17 +20,13 @@ object WalletHelper {
 
             )
 
-        CoroutineScope(Dispatchers.IO).launch {
-            walletPreferences.saveWalletPairs(walletPairs)
-        }
+        walletPreferences.saveWalletPairs(walletPairs)
     }
 
     /**
      * Remove all wallets from the preferences
      */
-    fun clearWallets(walletPreferences: WalletPreferences) {
-        CoroutineScope(Dispatchers.IO).launch {
-            walletPreferences.saveWalletPairs(emptyList())
-        }
+    suspend fun clearWallets(walletPreferences: WalletPreferences) {
+        walletPreferences.saveWalletPairs(emptyList())
     }
 }
