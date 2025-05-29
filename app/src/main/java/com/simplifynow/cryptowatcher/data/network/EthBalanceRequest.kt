@@ -6,10 +6,9 @@ import org.web3j.protocol.http.HttpService
 import org.web3j.utils.Convert
 import java.math.BigDecimal
 
-object EthBalanceRequest {
-    // Load the private key from the local.properties file via the BuildConfig
-    private val web3 = Web3j.build(HttpService("https://mainnet.infura.io/v3/${BuildConfig.infuraProjectId}"))
-
+class EthBalanceRequest(
+    private val web3: Web3j = Web3j.build(HttpService(BuildConfig.evmEndpoint))
+) {
     /**
      * Retrieves the Ethereum balance for a given address.
      */

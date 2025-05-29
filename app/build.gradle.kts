@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "com.simplifynow.cryptowatcher"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -26,7 +26,7 @@ android {
         val properties = Properties().apply {
             load(rootProject.file("local.properties").inputStream())
         }
-        buildConfigField("String", "infuraProjectId", "${properties["infuraProjectId"]}")
+        buildConfigField("String", "evmEndpoint", "${properties["evmEndpoint"]}")
     }
 
     buildTypes {
@@ -75,6 +75,7 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.truth)
+    testImplementation(libs.mockk)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

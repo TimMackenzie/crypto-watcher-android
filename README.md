@@ -26,10 +26,10 @@ While using Hilt for a small app may seem like overengineering due to the additi
 
 ## Setup Instructions
 
-1. Obtain a free [Infura](https://www.infura.io/) Project ID.
+1. Obtain a free EVM endpoint API key, such as from [Alchemy](https://www.alchemy.com).
 2. Add the following line to your `local.properties` file:
    ```properties
-   infuraProjectId = "<your Infura key>"
+   evmEndpoint="<your API endpoint with key>"
    ```
 3. Deploy to an Android emulator or device running Android 8 or higher.
 

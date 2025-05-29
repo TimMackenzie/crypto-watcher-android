@@ -30,7 +30,7 @@ class EthChecker(
 
     override fun getBalanceCard(): Flow<BalanceCardDataSource.BalanceItem> = flow {
         try {
-            val balance = EthBalanceRequest.getBalance(address)
+            val balance = EthBalanceRequest().getBalance(address)
 
             emit(
                 BalanceCardDataSource.BalanceItem(
