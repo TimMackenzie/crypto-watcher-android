@@ -1,11 +1,13 @@
-package com.simplifynow.cryptowatcher.data.local
+package com.simplifynow.cryptowatcher.data.local.datastore
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.simplifynow.cryptowatcher.data.local.WalletPreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -26,36 +28,37 @@ class WalletPreferencesDataStoreImpl @Inject constructor(
     private val key = stringPreferencesKey("wallet_pairs")
 
     override suspend fun saveWalletPairs(walletPairs: List<WalletPreferences.WalletPair>) {
-        val jsonString = Json.encodeToString(walletPairs)
+        val jsonString = Json.Default.encodeToString(walletPairs)
         context.dataStore.edit { prefs ->
             prefs[key] = jsonString
         }
     }
 
     override fun getWalletPairs(): Flow<List<WalletPreferences.WalletPair>> {
+        Log.d("getWalletPairs",  "Using DataStore")
         return context.dataStore.data.map { prefs ->
             val jsonString = prefs[key]
-            jsonString?.let { Json.decodeFromString<List<WalletPreferences.WalletPair>>(it) } ?: emptyList()
+            jsonString?.let { Json.Default.decodeFromString<List<WalletPreferences.WalletPair>>(it) } ?: emptyList()
         }
     }
 
     override suspend fun addWalletPair(pair: WalletPreferences.WalletPair) {
         context.dataStore.edit { prefs ->
             val currentList =
-                prefs[key]?.let { Json.decodeFromString<List<WalletPreferences.WalletPair>>(it) }
+                prefs[key]?.let { Json.Default.decodeFromString<List<WalletPreferences.WalletPair>>(it) }
                     ?: emptyList()
             val updatedList = currentList + pair
-            prefs[key] = Json.encodeToString(updatedList)
+            prefs[key] = Json.Default.encodeToString(updatedList)
         }
     }
 
     override suspend fun removeWalletPair(pair: WalletPreferences.WalletPair) {
         context.dataStore.edit { prefs ->
             val currentList =
-                prefs[key]?.let { Json.decodeFromString<List<WalletPreferences.WalletPair>>(it) }
+                prefs[key]?.let { Json.Default.decodeFromString<List<WalletPreferences.WalletPair>>(it) }
                     ?: emptyList()
             val updatedList = currentList - pair
-            prefs[key] = Json.encodeToString(updatedList.toList())
+            prefs[key] = Json.Default.encodeToString(updatedList.toList())
         }
     }
 }

@@ -1,23 +1,37 @@
 package com.simplifynow.cryptowatcher.data.local
 
 import android.content.Context
+import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import com.simplifynow.cryptowatcher.data.local.datastore.WalletPreferencesDataStoreImpl
+import com.simplifynow.cryptowatcher.data.local.room.WalletPreferencesDatabase
+import com.simplifynow.cryptowatcher.data.local.room.WalletPreferencesRoomImpl
 import junit.framework.TestCase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Test
+import kotlin.jvm.java
 
 class WalletPreferencesImplTest {
     // WalletPreferencesImpl is a singleton; add to companion object to ensure there is only one copy
     companion object {
         private val testContext = ApplicationProvider.getApplicationContext<Context>()
-        val walletPreferencesDataStore = WalletPreferencesDataStoreImpl(testContext)
+        private val walletPreferencesDataStore = WalletPreferencesDataStoreImpl(testContext)
+
+        private val testDb = Room.inMemoryDatabaseBuilder(
+            testContext,
+            WalletPreferencesDatabase::class.java
+        ).allowMainThreadQueries().build()
+
+        val walletPreferencesRoom = WalletPreferencesRoomImpl(testDb.walletDao())
+
     }
 
     @Test
     fun test_add_pairs() {
         test_add_pairs(walletPreferencesDataStore)
+        test_add_pairs(walletPreferencesRoom)
     }
 
     private fun test_add_pairs(walletPreferences: WalletPreferences) = runTest {
@@ -39,6 +53,7 @@ class WalletPreferencesImplTest {
     @Test
     fun test_remove_pairs() {
         test_remove_pairs(walletPreferencesDataStore)
+        test_remove_pairs(walletPreferencesRoom)
     }
 
     private fun test_remove_pairs(walletPreferences: WalletPreferences) = runTest {

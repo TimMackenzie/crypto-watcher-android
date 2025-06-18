@@ -11,7 +11,7 @@ As this is a demonstration project, it includes FAB actions to add and remove te
 - **Clean Architecture**: Separation of data access, business logic, and UI layers.
 - **UI**: Built with Material 3 and Jetpack Compose.
 - **Dependency Injection**: Uses Hilt for simplified DI and better modularity.
-- **Data Sources**: Integrates Web3j and Retrofit 2 for external data, and DataStore for local preferences.
+- **Data Sources**: Integrates Web3j and Retrofit 2 for external data, and DataStore or Room (controlled by build flavor) for local preferences.
 - **Testing**: Includes tests using Espresso and JUnit, with assertions powered by Google Truth.
 - **Build**: Kotlin build structure
 

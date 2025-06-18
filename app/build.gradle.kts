@@ -11,12 +11,12 @@ plugins {
 
 android {
     namespace = "com.simplifynow.cryptowatcher"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.simplifynow.cryptowatcher"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -27,6 +27,20 @@ android {
             load(rootProject.file("local.properties").inputStream())
         }
         buildConfigField("String", "evmEndpoint", "${properties["evmEndpoint"]}")
+    }
+
+    // Select which implementation of WalletPreferences to use by build flavor
+    flavorDimensions += "storage"
+    productFlavors {
+        create("dataStore") {
+            dimension = "storage"
+            buildConfigField("Boolean", "USE_ROOM", "false")
+
+        }
+        create("room") {
+            dimension = "storage"
+            buildConfigField("Boolean", "USE_ROOM", "true")
+        }
     }
 
     buildTypes {
@@ -71,11 +85,21 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.core.ktx)
+    // Room components
+    implementation(libs.androidx.room.runtime)
+
+
+    // Room with Kotlin coroutines support
+    implementation(libs.androidx.room.ktx)
+
+
     kapt(libs.hilt.compiler)
+    kapt(libs.androidx.room.compiler)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.truth)
     testImplementation(libs.mockk)
+    testImplementation(libs.androidx.room.testing)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
