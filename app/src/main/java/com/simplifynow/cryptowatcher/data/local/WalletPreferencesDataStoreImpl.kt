@@ -19,7 +19,7 @@ import javax.inject.Singleton
  * This is instantiated via injection and also receives context via injection
  */
 @Singleton
-class WalletPreferencesImpl @Inject constructor(
+class WalletPreferencesDataStoreImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : WalletPreferences {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "wallets")

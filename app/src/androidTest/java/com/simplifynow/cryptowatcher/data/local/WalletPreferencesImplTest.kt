@@ -12,11 +12,15 @@ class WalletPreferencesImplTest {
     // WalletPreferencesImpl is a singleton; add to companion object to ensure there is only one copy
     companion object {
         private val testContext = ApplicationProvider.getApplicationContext<Context>()
-        val walletPreferences = WalletPreferencesImpl(testContext)
+        val walletPreferencesDataStore = WalletPreferencesDataStoreImpl(testContext)
     }
 
     @Test
-    fun test_add_pairs() = runTest {
+    fun test_add_pairs() {
+        test_add_pairs(walletPreferencesDataStore)
+    }
+
+    private fun test_add_pairs(walletPreferences: WalletPreferences) = runTest {
         val initialPair = WalletPreferences.WalletPair(WalletPreferences.WalletType.ETH, "wallet1")
         val newPair = WalletPreferences.WalletPair(WalletPreferences.WalletType.WAX, "wallet2")
 
@@ -33,7 +37,11 @@ class WalletPreferencesImplTest {
     }
 
     @Test
-    fun test_remove_pairs() = runTest {
+    fun test_remove_pairs() {
+        test_remove_pairs(walletPreferencesDataStore)
+    }
+
+    private fun test_remove_pairs(walletPreferences: WalletPreferences) = runTest {
         val pair1 = WalletPreferences.WalletPair(WalletPreferences.WalletType.ETH, "wallet1")
         val pair2 = WalletPreferences.WalletPair(WalletPreferences.WalletType.WAX, "wallet2")
 

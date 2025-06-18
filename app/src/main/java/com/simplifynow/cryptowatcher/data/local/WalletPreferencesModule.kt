@@ -14,6 +14,6 @@ abstract class WalletPreferencesModule {
 
     @Binds
     abstract fun bindWalletPreferences(
-        impl: WalletPreferencesImpl
+        impl: WalletPreferencesDataStoreImpl
     ): WalletPreferences
 }
