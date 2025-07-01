@@ -31,7 +31,7 @@ fun WaxInputDialog(
      * Perform basic validation that this seems like a valid wax address, from 2 to 12 chars
      */
     fun isValidWaxAddress(address: String): Boolean {
-        val waxRegex = "^[a-z][a-z1-5]{1,11}$".toRegex()
+        val waxRegex = "^[a-z][a-z1-5.]{1,11}$".toRegex()
         return address.matches(waxRegex)
     }
 
