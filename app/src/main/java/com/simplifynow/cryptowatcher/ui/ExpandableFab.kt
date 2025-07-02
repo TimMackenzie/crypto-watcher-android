@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
  * Expandable FAB with options for each wallet type, deleting all wallets, and adding test wallets
  */
 @Composable
-fun ExpandableFab(viewModel: WalletViewModel = hiltViewModel()) {
+fun ExpandableFab(viewModel: CryptoWatcherViewModel = hiltViewModel()) {
     var expanded by remember { mutableStateOf(false) }
     var showWaxInput by remember { mutableStateOf(false) }
     var showEvmInput by remember { mutableStateOf(false) }

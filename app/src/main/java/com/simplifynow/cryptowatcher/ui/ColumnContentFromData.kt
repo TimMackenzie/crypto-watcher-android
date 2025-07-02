@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
  * @param adapterList The list of data sources to load
  */
 @Composable
-fun ColumnContentFromData(adapterList: List<BalanceCardDataSource>, viewModel: WalletViewModel = hiltViewModel()) {
+fun ColumnContentFromData(adapterList: List<BalanceCardDataSource>, viewModel: CryptoWatcherViewModel = hiltViewModel()) {
     val coroutineScope = rememberCoroutineScope()
 
     LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
