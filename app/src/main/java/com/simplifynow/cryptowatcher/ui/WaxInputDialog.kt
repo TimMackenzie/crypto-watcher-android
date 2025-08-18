@@ -1,6 +1,7 @@
 package com.simplifynow.cryptowatcher.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import com.simplifynow.cryptowatcher.R
 
 
@@ -20,4 +21,10 @@ fun WaxInputDialog(
         onDismiss = onDismiss,
         onConfirm = onConfirm
     )
+}
+
+@Preview
+@Composable
+fun WaxInputDialogPreview() {
+    WaxInputDialog(onDismiss = {}, onConfirm = {})
 }

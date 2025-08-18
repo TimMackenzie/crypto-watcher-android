@@ -1,6 +1,7 @@
 package com.simplifynow.cryptowatcher.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import com.simplifynow.cryptowatcher.R
 
 /**
@@ -19,4 +20,10 @@ fun EvmInputDialog(
         onDismiss = onDismiss,
         onConfirm = onConfirm
     )
+}
+
+@Preview
+@Composable
+fun EvmInputDialogPreview() {
+    EvmInputDialog(onDismiss = {}, onConfirm = {})
 }
