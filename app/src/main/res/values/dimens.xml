@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_column">16dp</dimen>
+    <dimen name="padding_text">4dp</dimen>
+    <dimen name="spacer">24dp</dimen>
+    <dimen name="spacer_double">24dp</dimen>
+
+    <dimen name="text_small">14sp</dimen>
+    <dimen name="text_medium">18sp</dimen>
+    <dimen name="text_large">24sp</dimen>
+    <dimen name="text_largest">32sp</dimen>
+
+</resources>

@@ -22,7 +22,8 @@ class EthChecker(
     override fun getLoadingItem(): BalanceCardDataSource.BalanceItem {
         return BalanceCardDataSource.BalanceItem(
             iconId = R.drawable.ic_downloading,
-            chainName = context.getString(R.string.chain_eth),
+            chainName = context.getString(R.string.chain_name_eth),
+            chainId = context.getString(R.string.chain_id_eth),
             address = address,
             balance = context.getString(R.string.loading)
         )
@@ -35,7 +36,8 @@ class EthChecker(
             emit(
                 BalanceCardDataSource.BalanceItem(
                     iconId = R.drawable.ic_crypto_ethereum,
-                    chainName = context.getString(R.string.chain_eth),
+                    chainName = context.getString(R.string.chain_name_eth),
+                    chainId = context.getString(R.string.chain_id_eth),
                     address = address,
                     balance = balance?.toPlainString() ?: context.getString(R.string.data_error)
                 )
@@ -46,7 +48,8 @@ class EthChecker(
             emit(
                 BalanceCardDataSource.BalanceItem(
                     iconId = R.drawable.ic_crypto_ethereum,
-                    chainName = context.getString(R.string.chain_eth),
+                    chainName = context.getString(R.string.chain_name_eth),
+                    chainId = context.getString(R.string.chain_id_eth),
                     address = address,
                     balance = context.getString(R.string.network_error)
                 )

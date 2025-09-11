@@ -24,7 +24,8 @@ class WaxChecker(
     override fun getLoadingItem(): BalanceCardDataSource.BalanceItem {
         return BalanceCardDataSource.BalanceItem(
             iconId = R.drawable.ic_downloading,
-            chainName = context.getString(R.string.chain_wax),
+            chainName = context.getString(R.string.chain_name_wax),
+            chainId = context.getString(R.string.chain_id_wax),
             address = address,
             balance = context.getString(R.string.loading)
         )
@@ -33,7 +34,7 @@ class WaxChecker(
     override fun getBalanceCard(): Flow<BalanceCardDataSource.BalanceItem> = flow {
         Log.d("WaxChecker", "Getting wax balance for $address")
         try {
-            val response = RetrofitClient.instance.getCurrencyBalance(
+            val response = RetrofitClient.waxApi.getCurrencyBalance(
                 WaxBalanceRequest(account = address)
             ).execute()
 
@@ -43,7 +44,8 @@ class WaxChecker(
             emit(
                 BalanceCardDataSource.BalanceItem(
                     iconId = R.drawable.ic_crypto_wax,
-                    chainName = context.getString(R.string.chain_wax),
+                    chainName = context.getString(R.string.chain_name_wax),
+                    chainId = context.getString(R.string.chain_id_wax),
                     address = address,
                     balance = response.body()?.getOrNull(0) ?: context.getString(R.string.data_error)
                 )
@@ -54,7 +56,8 @@ class WaxChecker(
             emit(
                 BalanceCardDataSource.BalanceItem(
                     iconId = R.drawable.ic_crypto_wax,
-                    chainName = context.getString(R.string.chain_wax),
+                    chainName = context.getString(R.string.chain_name_wax),
+                    chainId = context.getString(R.string.chain_id_wax),
                     address = address,
                     balance = context.getString(R.string.network_error)
                 )

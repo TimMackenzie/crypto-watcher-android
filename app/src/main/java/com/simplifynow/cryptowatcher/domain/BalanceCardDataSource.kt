@@ -21,6 +21,7 @@ interface BalanceCardDataSource {
     data class BalanceItem(
         @DrawableRes val iconId: Int,
         val chainName: String,
+        val chainId: String,
         val address: String,
         val balance: String
     )

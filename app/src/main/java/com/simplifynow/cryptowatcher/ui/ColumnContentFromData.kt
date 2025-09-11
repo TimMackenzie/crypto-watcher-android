@@ -26,9 +26,11 @@ fun ColumnContentFromData(adapterList: List<BalanceCardDataSource>, viewModel: C
     LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         items(adapterList) { item ->
             BalanceCard(
-                item.getBalanceCard().collectAsState(
+                item = item.getBalanceCard().collectAsState(
                     item.getLoadingItem()
-                ).value
+                ).value,
+                prices = viewModel.usdPrices.collectAsState().value,
+
             ) {
                 Log.d("MainActivity", "Clicked to delete")
                 coroutineScope.launch {

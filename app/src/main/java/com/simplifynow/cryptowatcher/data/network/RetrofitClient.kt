@@ -7,13 +7,25 @@ import retrofit2.converter.gson.GsonConverterFactory
  * Singleton to instantiate the wax API service
  */
 object RetrofitClient {
-    private const val BASE_URL = "https://api.wax.alohaeos.com/"
+    // List of all chains supported in this app, using IDs from CoinGecko API
+    val KNOWN_CHAINS = listOf("ethereum", "wax").joinToString(",")
 
-    val instance: WaxApiService by lazy {
+    private const val WAX_URL = "https://api.wax.alohaeos.com/"
+    private const val COIN_GECKO_URL = "https://api.coingecko.com/api/v3/"
+
+    val waxApi: WaxApiService by lazy {
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(WAX_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(WaxApiService::class.java)
+    }
+
+    val coinGeckoApi: CoinGeckoApi by lazy {
+        Retrofit.Builder()
+            .baseUrl(COIN_GECKO_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(CoinGeckoApi::class.java)
     }
 }

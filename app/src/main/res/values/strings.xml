@@ -14,7 +14,9 @@
     <string name="confirm">Confirm</string>
     <string name="data_error">Data error</string>
     <string name="network_error">Network error</string>
-    <string name="chain_eth">ETH</string>
-    <string name="chain_wax">Wax</string>
+    <string name="chain_name_eth">ETH</string>
+    <string name="chain_name_wax">WAX</string>
+    <string name="chain_id_eth">ethereum</string>
+    <string name="chain_id_wax">wax</string>
     <string name="loading">Loading…</string>
 </resources>

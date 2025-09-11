@@ -12,7 +12,7 @@ class WaxApiServiceTest {
      */
     @Test
     fun test_getCurrencyBalance() {
-        val response = RetrofitClient.instance.getCurrencyBalance(
+        val response = RetrofitClient.waxApi.getCurrencyBalance(
             WaxBalanceRequest(
                 "eosio.token",
                 "eosio",
