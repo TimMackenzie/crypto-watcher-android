@@ -36,14 +36,20 @@ import kotlinx.coroutines.launch
  * Expandable FAB with options for each wallet type, deleting all wallets, and adding test wallets
  */
 @Composable
-fun ExpandableFab(viewModel: CryptoWatcherViewModel = hiltViewModel()) {
+fun ExpandableFab(
+    modifier: Modifier = Modifier,
+    viewModel: CryptoWatcherViewModel = hiltViewModel()
+) {
     var expanded by remember { mutableStateOf(false) }
     var showWaxInput by remember { mutableStateOf(false) }
     var showEvmInput by remember { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomEnd
+    ) {
         Column(
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -52,7 +58,7 @@ fun ExpandableFab(viewModel: CryptoWatcherViewModel = hiltViewModel()) {
             if (expanded) {
                 FabButton(
                     icon = ImageVector.vectorResource(R.drawable.ic_crypto_wax),
-                    label = "Wax"
+                    label = "Wax",
                 ) {
                     println("Wax Clicked")
                     showWaxInput = true

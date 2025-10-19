@@ -54,12 +54,13 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlin {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
     buildFeatures {
@@ -78,10 +79,14 @@ android {
                 "META-INF/NOTICE.txt",
                 "META-INF/NOTICE.md",
                 "META-INF/DEPENDENCIES",
-                "META-INF/LICENSE-notice.md"
+                "META-INF/LICENSE-notice.md",
+                "META-INF/INDEX.LIST",
+                "META-INF/AL2.0",
+                "META-INF/LGPL2.1",
+                "META-INF/FastDoubleParser-LICENSE",
+                "META-INF/FastDoubleParser-NOTICE",
+                "META-INF/io.netty.versions.properties"
             )
-            // Android’s sample excludes, keep if you want:
-            excludes += setOf("META-INF/{AL2.0,LGPL2.1}")
         }
     }
 }
@@ -95,13 +100,14 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material)
+    implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.material3)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.web3j.core)
     implementation(libs.androidx.datastore.core.android)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.metadata.jvm) // added to explicitly control for hilt compatibility
     implementation(libs.hilt.android)
@@ -111,6 +117,11 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     // Room with Kotlin coroutines support
     implementation(libs.androidx.room.ktx)
+
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+
+    // Linting specifically for Compose
+    lintChecks(libs.compose.lint.checks)
 
     ksp(libs.hilt.compiler)
     ksp(libs.androidx.room.compiler)

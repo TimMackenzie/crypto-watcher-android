@@ -26,10 +26,15 @@ import androidx.compose.ui.unit.dp
  * @param onClick the function to call when the button is clicked
  */
 @Composable
-fun FabButton(icon: ImageVector, label: String, onClick: () -> Unit) {
+fun FabButton(
+    icon: ImageVector,
+    label: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.clickable(onClick = onClick)
+        modifier = modifier.clickable(onClick = onClick)
     ) {
         Text(
             text = label,

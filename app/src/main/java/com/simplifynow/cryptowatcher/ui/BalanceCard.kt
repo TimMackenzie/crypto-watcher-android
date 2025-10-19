@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.simplifynow.cryptowatcher.domain.BalanceCardDataSource
+import kotlinx.collections.immutable.ImmutableMap
 
 /**
  * Show a single wallet card with icon, address, and balance
@@ -29,7 +30,12 @@ import com.simplifynow.cryptowatcher.domain.BalanceCardDataSource
  * @param onClick the delete function to call when the card is clicked and confirmed for deletion
  */
 @Composable
-fun BalanceCard(item: BalanceCardDataSource.BalanceItem, prices: Map<String, Double>, onClick: () -> Unit) {
+fun BalanceCard(
+    item: BalanceCardDataSource.BalanceItem,
+    prices: ImmutableMap<String, Double>,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val showDeleteDialog = remember { mutableStateOf(false) }
     if (showDeleteDialog.value) {
         DeleteCardConfirmation(onClick, showDeleteDialog)
@@ -41,7 +47,7 @@ fun BalanceCard(item: BalanceCardDataSource.BalanceItem, prices: Map<String, Dou
     }
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
             .combinedClickable(

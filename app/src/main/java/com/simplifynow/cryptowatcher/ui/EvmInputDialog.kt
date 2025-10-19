@@ -24,6 +24,6 @@ fun EvmInputDialog(
 
 @Preview
 @Composable
-fun EvmInputDialogPreview() {
+private fun EvmInputDialogPreview() {
     EvmInputDialog(onDismiss = {}, onConfirm = {})
 }

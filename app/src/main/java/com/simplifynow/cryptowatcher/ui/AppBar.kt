@@ -6,6 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.simplifynow.cryptowatcher.R
 
@@ -14,7 +15,9 @@ import com.simplifynow.cryptowatcher.R
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBar() {
+fun AppBar(
+    modifier: Modifier = Modifier
+) {
     TopAppBar(
         title = {
             Text(
@@ -23,6 +26,7 @@ fun AppBar() {
                 color = MaterialTheme.colorScheme.inverseOnSurface
             )
         },
+        modifier = modifier,
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary
         )

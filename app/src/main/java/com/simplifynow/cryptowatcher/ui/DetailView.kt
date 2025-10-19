@@ -20,14 +20,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.simplifynow.cryptowatcher.R
 import com.simplifynow.cryptowatcher.domain.BalanceCardDataSource
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
 import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailView(
-        item: BalanceCardDataSource.BalanceItem,
-        prices: Map<String, Double>,
-        onClose: () -> Unit
+    item: BalanceCardDataSource.BalanceItem,
+    prices: ImmutableMap<String, Double>,
+    onClose: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
@@ -47,6 +50,7 @@ fun DetailView(
 
     ModalBottomSheet(
         onDismissRequest = { onClose() },
+        modifier = modifier,
         sheetState = sheetState
     ) {
         Column(
@@ -99,12 +103,12 @@ fun parseNumericBalance(balanceText: String): Double =
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun PreviewDetailView() {
+private fun PreviewDetailView() {
     val item = BalanceCardDataSource.BalanceItem(
         0, "Wax", "wax","eosio", "123.4"
     )
 
-    val prices = mapOf(Pair("ethereum", 123.45), Pair("wax", 0.02))
+    val prices = persistentMapOf(Pair("ethereum", 123.45), Pair("wax", 0.02))
 
     DetailView(item, prices, onClose = {})
 }

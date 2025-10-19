@@ -25,6 +25,6 @@ fun WaxInputDialog(
 
 @Preview
 @Composable
-fun WaxInputDialogPreview() {
+private fun WaxInputDialogPreview() {
     WaxInputDialog(onDismiss = {}, onConfirm = {})
 }

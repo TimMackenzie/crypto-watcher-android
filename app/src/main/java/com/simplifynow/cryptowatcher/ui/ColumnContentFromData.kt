@@ -7,11 +7,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.simplifynow.cryptowatcher.domain.BalanceCardDataSource
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 
 /**
@@ -20,25 +22,31 @@ import kotlinx.coroutines.launch
  * @param adapterList The list of data sources to load
  */
 @Composable
-fun ColumnContentFromData(adapterList: List<BalanceCardDataSource>, viewModel: CryptoWatcherViewModel = hiltViewModel()) {
+fun ColumnContentFromData(
+    adapterList: ImmutableList<BalanceCardDataSource>,
+    modifier: Modifier = Modifier,
+    viewModel: CryptoWatcherViewModel = hiltViewModel()
+) {
     val coroutineScope = rememberCoroutineScope()
+    val prices by viewModel.usdPrices.collectAsState()
 
-    LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    LazyColumn(modifier = modifier.fillMaxSize().padding(16.dp)) {
+        Log.d("ColumnContentFromData", "Loading: ${adapterList.size}")
         items(adapterList) { item ->
+            Log.d("ColumnContentFromData", "Loading: ${item.getWalletPair().type}: ${item.getWalletPair().address}")
+            val cardData by item.getBalanceCard().collectAsState()
             BalanceCard(
-                item = item.getBalanceCard().collectAsState(
-                    item.getLoadingItem()
-                ).value,
-                prices = viewModel.usdPrices.collectAsState().value,
-
-            ) {
-                Log.d("MainActivity", "Clicked to delete")
-                coroutineScope.launch {
-                    viewModel.getPreferences().removeWalletPair(
-                        item.getWalletPair()
-                    )
+                item = cardData,
+                prices = prices,
+                onClick = {
+                    Log.d("MainActivity", "Clicked to delete")
+                    coroutineScope.launch {
+                        viewModel.getPreferences().removeWalletPair(
+                            item.getWalletPair()
+                        )
+                    }
                 }
-            }
+            )
         }
     }
 }

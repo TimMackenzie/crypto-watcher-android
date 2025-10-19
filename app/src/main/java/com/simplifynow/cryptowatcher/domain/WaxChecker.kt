@@ -6,10 +6,15 @@ import com.simplifynow.cryptowatcher.R
 import com.simplifynow.cryptowatcher.data.local.WalletPreferences
 import com.simplifynow.cryptowatcher.data.network.RetrofitClient
 import com.simplifynow.cryptowatcher.data.network.WaxBalanceRequest
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.stateIn
 
 /**
  * Provide a flow that emits the balance of the given wax address
@@ -18,28 +23,31 @@ class WaxChecker(
     private val context: Context,
     private val address: String
 ) : BalanceCardDataSource {
-    override fun getWalletPair() = WalletPreferences.WalletPair(WalletPreferences.WalletType.WAX, address)
+    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
+    val loadingItem = BalanceCardDataSource.BalanceItem(
+        iconId = R.drawable.ic_downloading,
+        chainName = context.getString(R.string.chain_name_wax),
+        chainId = context.getString(R.string.chain_id_wax),
+        address = address,
+        balance = context.getString(R.string.loading)
+    )
 
-    override fun getLoadingItem(): BalanceCardDataSource.BalanceItem {
-        return BalanceCardDataSource.BalanceItem(
-            iconId = R.drawable.ic_downloading,
-            chainName = context.getString(R.string.chain_name_wax),
-            chainId = context.getString(R.string.chain_id_wax),
-            address = address,
-            balance = context.getString(R.string.loading)
-        )
-    }
+    private val errorItem = BalanceCardDataSource.BalanceItem(
+        iconId = R.drawable.ic_crypto_wax,
+        chainName = context.getString(R.string.chain_name_wax),
+        chainId = context.getString(R.string.chain_id_wax),
+        address = address,
+        balance = context.getString(R.string.network_error)
+    )
 
-    override fun getBalanceCard(): Flow<BalanceCardDataSource.BalanceItem> = flow {
-        Log.d("WaxChecker", "Getting wax balance for $address")
-        try {
+    private val balanceState: StateFlow<BalanceCardDataSource.BalanceItem> by lazy {
+        flow {
+            Log.d("WaxChecker", "Getting wax balance for $address")
             val response = RetrofitClient.waxApi.getCurrencyBalance(
                 WaxBalanceRequest(account = address)
             ).execute()
-
-            Log.d("WaxChecker", "completed request")
-
+            Log.d("WaxChecker", "completed request for $address")
 
             emit(
                 BalanceCardDataSource.BalanceItem(
@@ -47,21 +55,26 @@ class WaxChecker(
                     chainName = context.getString(R.string.chain_name_wax),
                     chainId = context.getString(R.string.chain_id_wax),
                     address = address,
-                    balance = response.body()?.getOrNull(0) ?: context.getString(R.string.data_error)
-                )
-            )
-        } catch (e: Exception) {
-            Log.e("WaxChecker", "Error getting wax balance", e)
-
-            emit(
-                BalanceCardDataSource.BalanceItem(
-                    iconId = R.drawable.ic_crypto_wax,
-                    chainName = context.getString(R.string.chain_name_wax),
-                    chainId = context.getString(R.string.chain_id_wax),
-                    address = address,
-                    balance = context.getString(R.string.network_error)
+                    balance = response.body()?.getOrNull(0)
+                        ?: context.getString(R.string.data_error)
                 )
             )
         }
-    }.flowOn(Dispatchers.IO)
+            .catch { e ->
+                if (e is CancellationException) {
+                    Log.d("WaxChecker", "Request cancelled")
+                } else {
+                    Log.e("WaxChecker", "Error getting wax balance", e)
+                    emit(errorItem)
+                }
+            }
+            .stateIn(
+                scope = scope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = loadingItem
+            )
+    }
+
+    override fun getWalletPair() = WalletPreferences.WalletPair(WalletPreferences.WalletType.WAX, address)
+    override fun getBalanceCard(): StateFlow<BalanceCardDataSource.BalanceItem> = balanceState
 }
